@@ -6,15 +6,16 @@ import org.terasology.engine.entitySystem.entity.EntityRef;
 import org.terasology.engine.entitySystem.event.EventPriority;
 import org.terasology.engine.entitySystem.event.ReceiveEvent;
 import org.terasology.engine.entitySystem.systems.BaseComponentSystem;
+import org.terasology.engine.entitySystem.systems.NetFilterEvent;
 import org.terasology.engine.entitySystem.systems.RegisterMode;
 import org.terasology.engine.entitySystem.systems.RegisterSystem;
+import org.terasology.engine.input.binds.general.ConsoleButton;
 import org.terasology.engine.logic.console.commandSystem.ConsoleCommand;
 import org.terasology.engine.logic.console.ui.NotificationOverlay;
-import org.terasology.input.ButtonState;
-import org.terasology.engine.input.binds.general.ConsoleButton;
 import org.terasology.engine.network.ClientComponent;
 import org.terasology.engine.registry.In;
 import org.terasology.engine.rendering.nui.NUIManager;
+import org.terasology.input.ButtonState;
 
 @RegisterSystem
 public class ConsoleSystem extends BaseComponentSystem {
@@ -58,7 +59,8 @@ public class ConsoleSystem extends BaseComponentSystem {
         }
     }
 
-    @ReceiveEvent(components = ClientComponent.class, netFilter = RegisterMode.AUTHORITY)
+    @NetFilterEvent(netFilter = RegisterMode.AUTHORITY)
+    @ReceiveEvent(components = ClientComponent.class)
     public void onCommand(CommandEvent event, EntityRef entity) {
         ConsoleCommand cmd = console.getCommand(event.getCommandName());
 
